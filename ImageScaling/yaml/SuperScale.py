@@ -10,39 +10,40 @@ from scipy.misc import imread
 from scipy.misc import imsave
 import os
 
-
 class SuperScale(DenseDesignMatrix):
     Xtrain = np.array([])
     ytrain = np.array([])
     Xval = np.array([])
     yval = np.array([])
+    moyenne = 127;
+    ecart_type = 127;
+    nbValeursTrain = 65333;
+    taille_fenetre_input = 8;
+    taille_fenetre_output = 10;
 
     @staticmethod
-    def initData(taille_fenetre=4):
-        #self.class_names = ['0', '255']
+    def initData():
         # On recupere les images pour entrainer le reseau.
         input = []
         for im in os.listdir("./dataset/images_input"):
             image = imread("./dataset/images_input/"+im, flatten=1)
-            imageDecoupe = SuperScale.decouper_image(image, 8)#taille_fenetre)
-            print "input :"
+            imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_input)
             print np.array(input).shape
             input.extend(imageDecoupe)
-        SuperScale.Xtrain = (np.array(input[0:1500])-127)/255 #si on met -1 1 mieux
+        SuperScale.Xtrain = (np.array(input[0:SuperScale.nbValeursTrain])-SuperScale.moyenne)/SuperScale.ecart_type #si on met -1 1 mieux
         #SuperScale.Xtrain = SuperScale.Xtrain.astype(int)
-        SuperScale.Xval = (np.array(input[1501:])-127)/255
+        SuperScale.Xval = (np.array(input[SuperScale.nbValeursTrain+1:])-SuperScale.moyenne)/SuperScale.ecart_type
         #SuperScale.Xval = SuperScale.Xval.astype(int)
 
         output = []
         for im in os.listdir("./dataset/images_output"):
             image = imread("./dataset/images_output/"+im, flatten=1)
-            imageDecoupe = SuperScale.decouper_image(image, 10)#taille_fenetre+1)
-            print "output :"
+            imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_output)
             print np.array(output).shape
             output.extend(imageDecoupe)
-        SuperScale.ytrain = (np.array(output[0:1500])-127)/255
+        SuperScale.ytrain = (np.array(output[0:SuperScale.nbValeursTrain])-SuperScale.moyenne)/SuperScale.ecart_type
         #SuperScale.ytrain = SuperScale.ytrain.astype(int)
-        SuperScale.yval = (np.array(output[1501:])-127)/255
+        SuperScale.yval = (np.array(output[SuperScale.nbValeursTrain+1:])-SuperScale.moyenne)/SuperScale.ecart_type
         #SuperScale.yval = SuperScale.yval.astype(int)
 
         print "Donnees crees, input: %s output: %s" % (np.array(input).shape, np.array(output).shape)
