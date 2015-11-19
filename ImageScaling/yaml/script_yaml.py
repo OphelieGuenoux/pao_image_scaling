@@ -13,4 +13,7 @@ from pylearn2.config import yaml_parse
 train = yaml_parse.load(train)
 train.main_loop()
 
+with open('model_final.pkl','wb') as f:
+    pickle.dump(train,f)
+
 

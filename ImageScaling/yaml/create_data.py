@@ -2,7 +2,7 @@ import cPickle as pickle
 
 from SuperScale import SuperScale
 
-SuperScale.initData()
+SuperScale.initData(taille_fenetre=4)
 ds = SuperScale('train')
 monitoringDs = SuperScale('valid')
 

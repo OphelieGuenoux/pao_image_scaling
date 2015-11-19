@@ -4,21 +4,21 @@
       "layers": [
          !obj:pylearn2.models.mlp.Sigmoid {
             layer_name: 'h1',
-            dim: 800,
+            dim: 82,
             sparse_init: 15,
           },
          !obj:pylearn2.models.mlp.Sigmoid {
             layer_name: 'y',
-            dim: 1600,
+            dim: 100,
             sparse_init: 15,
          }
       ],
-      "nvis": 1024,
+      "nvis": 64,
    },
    "algorithm": !obj:pylearn2.training_algorithms.sgd.SGD {
-      "learning_rate" : 0.1,
-      "batch_size" : 5, #mettre 1 a la place 
-      "monitoring_batches" : 5,
+      "learning_rate" : 0.05,
+      "batch_size" : 1, #mettre 1 a la place
+      "monitoring_batches" : 1,
       "monitoring_dataset": {
          "train": *train,
          "valid": !pkl: "dataset_val.pkl",
@@ -27,10 +27,12 @@
          "max_epochs": 300,
       },
    },
+   "save_path": "./model_fin.pkl",
    "extensions": [
       !obj:pylearn2.train_extensions.best_params.MonitorBasedSaveBest {
          "channel_name": 'valid_objective',
          "save_path": "./mlp_best.pkl"
       },
+      !obj:pylearn2.train_extensions.live_monitoring.LiveMonitoring {},
    ]
 }
