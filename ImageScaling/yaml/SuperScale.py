@@ -31,9 +31,9 @@ class SuperScale(DenseDesignMatrix):
             print np.array(input).shape
             input.extend(imageDecoupe)
         SuperScale.Xtrain = (np.array(input[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser #si on met -1 1 mieux
-        #SuperScale.Xtrain = SuperScale.Xtrain.astype(int)
+        SuperScale.Xtrain = SuperScale.Xtrain.astype(int)
         SuperScale.Xval = (np.array(input[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser
-        #SuperScale.Xval = SuperScale.Xval.astype(int)
+        SuperScale.Xval = SuperScale.Xval.astype(int)
 
         output = []
         for im in os.listdir("./dataset/images_output"):
@@ -42,9 +42,9 @@ class SuperScale(DenseDesignMatrix):
             print np.array(output).shape
             output.extend(imageDecoupe)
         SuperScale.ytrain = (np.array(output[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser
-        #SuperScale.ytrain = SuperScale.ytrain.astype(int)
+        SuperScale.ytrain = SuperScale.ytrain.astype(int)
         SuperScale.yval = (np.array(output[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser
-        #SuperScale.yval = SuperScale.yval.astype(int)
+        SuperScale.yval = SuperScale.yval.astype(int)
 
         print "Donnees crees, input: %s output: %s" % (np.array(input).shape, np.array(output).shape)
 
@@ -79,7 +79,7 @@ class SuperScale(DenseDesignMatrix):
                 print "erreur de dimension en Y"
             for j in range(taille_fenetre):
                 for k in range(taille_fenetre):
-                    newImage[offsetY+j, offsetX+k] = ( image_decomposee[i, j*taille_fenetre+k] )
+                    newImage[offsetY+j, offsetX+k] = ( newImage[offsetY+j, offsetX+k] + image_decomposee[i, j*taille_fenetre+k] )
             offsetX = offsetX + taille_fenetre/2
             if offsetX+taille_fenetre > taille_imageX:
                 offsetX = 0
