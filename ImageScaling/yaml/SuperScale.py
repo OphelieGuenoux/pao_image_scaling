@@ -15,8 +15,8 @@ class SuperScale(DenseDesignMatrix):
     ytrain = np.array([])
     Xval = np.array([])
     yval = np.array([])
-    moyenne = 127;
-    ecart_type = 127;
+    quantite_a_retirer = 0;
+    quantite_a_diviser = 255;
     nbValeursTrain = 65333;
     taille_fenetre_input = 8;
     taille_fenetre_output = 10;
@@ -30,9 +30,9 @@ class SuperScale(DenseDesignMatrix):
             imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_input)
             print np.array(input).shape
             input.extend(imageDecoupe)
-        SuperScale.Xtrain = (np.array(input[0:SuperScale.nbValeursTrain])-SuperScale.moyenne)/SuperScale.ecart_type #si on met -1 1 mieux
+        SuperScale.Xtrain = (np.array(input[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser #si on met -1 1 mieux
         #SuperScale.Xtrain = SuperScale.Xtrain.astype(int)
-        SuperScale.Xval = (np.array(input[SuperScale.nbValeursTrain+1:])-SuperScale.moyenne)/SuperScale.ecart_type
+        SuperScale.Xval = (np.array(input[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser
         #SuperScale.Xval = SuperScale.Xval.astype(int)
 
         output = []
@@ -41,9 +41,9 @@ class SuperScale(DenseDesignMatrix):
             imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_output)
             print np.array(output).shape
             output.extend(imageDecoupe)
-        SuperScale.ytrain = (np.array(output[0:SuperScale.nbValeursTrain])-SuperScale.moyenne)/SuperScale.ecart_type
+        SuperScale.ytrain = (np.array(output[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser
         #SuperScale.ytrain = SuperScale.ytrain.astype(int)
-        SuperScale.yval = (np.array(output[SuperScale.nbValeursTrain+1:])-SuperScale.moyenne)/SuperScale.ecart_type
+        SuperScale.yval = (np.array(output[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser
         #SuperScale.yval = SuperScale.yval.astype(int)
 
         print "Donnees crees, input: %s output: %s" % (np.array(input).shape, np.array(output).shape)

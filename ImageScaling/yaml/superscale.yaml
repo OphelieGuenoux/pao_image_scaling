@@ -2,12 +2,12 @@
    "dataset": &train !pkl: "dataset_app.pkl",
    "model": !obj:pylearn2.models.mlp.MLP {
       "layers": [
-         !obj:pylearn2.models.mlp.Tanh {
+         !obj:pylearn2.models.mlp.Sigmoid {
             layer_name: 'h1',
             dim: 82,
             irange: .1,
           },
-         !obj:pylearn2.models.mlp.Tanh {
+         !obj:pylearn2.models.mlp.Sigmoid {
             layer_name: 'y',
             dim: 100,
             irange: .1,

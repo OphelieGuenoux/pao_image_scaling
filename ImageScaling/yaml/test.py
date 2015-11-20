@@ -16,13 +16,13 @@ Y = model.fprop( X )
 f = theano.function( [X], Y )
 
 #Image 4
-imageTest = np.array((imread("./dataset/images_input/5.png", flatten=1)-SuperScale.moyenne)/SuperScale.ecart_type)
+imageTest = np.array((imread("./dataset/images_input/5.png", flatten=1)-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser)
 imageDecompo = SuperScale.decouper_image(imageTest, 8)
 
 #imageReconstruite = ann.fprop(theano.shared(imageTest, name='inputs')).eval()
 #imageReconstruiteReshape = imageReconstruite.reshape((32, 32))
 #imsave("reconstruction4.png", imageReconstruiteReshape)
-imsave("original4.png", imageTest.reshape((32,32))*SuperScale.ecart_type+SuperScale.moyenne)
+imsave("original4.png", imageTest.reshape((32,32))*SuperScale.quantite_a_diviser+SuperScale.quantite_a_retirer)
 
 [n, p] = np.shape(imageDecompo)
 imageReconstruite = np.zeros((n, 100))
@@ -33,6 +33,6 @@ print imageDecompo[10]
 print imageReconstruite[10]
 
 imageReconstruite = SuperScale.recomposer_image(np.around(imageReconstruite), 40, 40, 10)
-imageReconstruite = imageReconstruite * SuperScale.ecart_type + SuperScale.moyenne
+imageReconstruite = imageReconstruite * SuperScale.quantite_a_diviser + SuperScale.quantite_a_retirer
 
 imsave("reconstruction4.png", imageReconstruite)
