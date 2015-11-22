@@ -28,6 +28,7 @@
       },
    },
    "save_path": "./model_fin.pkl",
+   "save_freq": 1,
    "extensions": [
       !obj:pylearn2.train_extensions.best_params.MonitorBasedSaveBest {
          "channel_name": 'valid_objective',
