@@ -71,7 +71,7 @@ class SuperScale(DenseDesignMatrix):
     def recomposer_image(image_decomposee, taille_imageX, taille_imageY, taille_fenetre):
         offsetX = 0
         offsetY = 0
-        newImage = np.zeros((taille_imageY, taille_imageX))
+        newImage = var = [[[] for i in range(taille_imageX)] for _ in range(taille_imageY)]
         [n, p] = image_decomposee.shape
 
         for i in range(n):
@@ -79,11 +79,18 @@ class SuperScale(DenseDesignMatrix):
                 print "erreur de dimension en Y"
             for j in range(taille_fenetre):
                 for k in range(taille_fenetre):
-                    newImage[offsetY+j, offsetX+k] = ( newImage[offsetY+j, offsetX+k] + image_decomposee[i, j*taille_fenetre+k] )
+                    newImage[offsetY+j][offsetX+k].append(image_decomposee[i, j*taille_fenetre+k])
             offsetX = offsetX + taille_fenetre/2
             if offsetX+taille_fenetre > taille_imageX:
                 offsetX = 0
                 offsetY = offsetY + taille_fenetre/2
+
+        for i in range(taille_imageY):
+            for j in range(taille_imageX):
+                if not len(var[i][j]) == 0:
+                    var[i][j] = sum(var[i][j])/len(var[i][j])
+                else:
+                    var[i][j] = 0
 
         return np.array(newImage)
 
