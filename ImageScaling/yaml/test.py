@@ -7,7 +7,7 @@ import os
 
 from SuperScale import SuperScale
 
-model_path = 'mlp_best.pkl'
+model_path = 'model_fin.pkl'
 model = serial.load( model_path )
 
 

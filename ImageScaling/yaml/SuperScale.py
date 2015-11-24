@@ -71,7 +71,7 @@ class SuperScale(DenseDesignMatrix):
     def recomposer_image(image_decomposee, taille_imageX, taille_imageY, taille_fenetre):
         offsetX = 0
         offsetY = 0
-        newImage = var = [[[] for i in range(taille_imageX)] for _ in range(taille_imageY)]
+        newImage = [[[] for i in range(taille_imageX)] for _ in range(taille_imageY)]
         [n, p] = image_decomposee.shape
 
         for i in range(n):
@@ -87,12 +87,12 @@ class SuperScale(DenseDesignMatrix):
 
         for i in range(taille_imageY):
             for j in range(taille_imageX):
-                if not len(var[i][j]) == 0:
-                    var[i][j] = sum(var[i][j])/len(var[i][j])
+                if not len(newImage[i][j]) == 0:
+                    newImage[i][j] = sum(newImage[i][j])/len(newImage[i][j])
                 else:
-                    var[i][j] = 0
+                    newImage[i][j] = 0
 
-        return np.array(newImage)
+        return np.array(newImage).astype(int)
 
     def __init__(self,val):
         if(val=='train'):
