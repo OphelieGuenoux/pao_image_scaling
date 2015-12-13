@@ -5,18 +5,18 @@
          !obj:pylearn2.models.mlp.Sigmoid {
             layer_name: 'h1',
             dim: 82,
-            irange: .1,
+            irange: 0.,
           },
          !obj:pylearn2.models.mlp.Sigmoid {
             layer_name: 'y',
             dim: 100,
-            irange: .1,
+            irange: 0.,
          }
       ],
       "nvis": 64,
    },
    "algorithm": !obj:pylearn2.training_algorithms.sgd.SGD {
-      "learning_rate" : 0.05,
+      "learning_rate" : 0.001,
       "batch_size" : 1, #mettre 1 a la place
       "monitoring_batches" : 1,
       "monitoring_dataset": {
@@ -24,7 +24,7 @@
          "valid": !pkl: "dataset_val.pkl",
       },
       "termination_criterion": !obj:pylearn2.termination_criteria.EpochCounter {
-         "max_epochs": 300,
+         "max_epochs": 1000,
       },
    },
    "save_path": "./model_fin.pkl",
@@ -33,6 +33,11 @@
       !obj:pylearn2.train_extensions.best_params.MonitorBasedSaveBest {
          "channel_name": 'valid_objective',
          "save_path": "./mlp_best.pkl"
+      },
+      !obj:pylearn2.training_algorithms.sgd.LinearDecayOverEpoch {
+         "start" : 4,
+         "saturate" : 20,
+         "decay_factor" : 0.01
       },
       !obj:pylearn2.train_extensions.live_monitoring.LiveMonitoring {},
    ]

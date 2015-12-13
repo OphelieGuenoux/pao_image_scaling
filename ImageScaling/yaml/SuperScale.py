@@ -17,9 +17,10 @@ class SuperScale(DenseDesignMatrix):
     yval = np.array([])
     quantite_a_retirer = 0;
     quantite_a_diviser = 255;
-    nbValeursTrain = 65333;
+    nbValeursTrain = 16000;
     taille_fenetre_input = 8;
     taille_fenetre_output = 10;
+    recouvrement = 0;
 
     @staticmethod
     def initData():
@@ -27,7 +28,7 @@ class SuperScale(DenseDesignMatrix):
         input = []
         for im in os.listdir("./dataset/images_input"):
             image = imread("./dataset/images_input/"+im, flatten=1)
-            imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_input)
+            imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_input, SuperScale.recouvrement)
             print np.array(input).shape
             input.extend(imageDecoupe)
         SuperScale.Xtrain = (np.array(input[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser #si on met -1 1 mieux
@@ -38,7 +39,7 @@ class SuperScale(DenseDesignMatrix):
         output = []
         for im in os.listdir("./dataset/images_output"):
             image = imread("./dataset/images_output/"+im, flatten=1)
-            imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_output)
+            imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_output, SuperScale.recouvrement)
             print np.array(output).shape
             output.extend(imageDecoupe)
         SuperScale.ytrain = (np.array(output[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer)/SuperScale.quantite_a_diviser
@@ -50,7 +51,7 @@ class SuperScale(DenseDesignMatrix):
 
     # Fonction qui decompose une image grace a une certaine fenetre
     @staticmethod
-    def decouper_image(image, taille_fenetre=8):
+    def decouper_image(image, taille_fenetre=8, recouvrement=0.5):
         offsetX = 0
         offsetY = 0
         newImage = []
@@ -61,14 +62,14 @@ class SuperScale(DenseDesignMatrix):
                 fenetre = 0
                 fenetre = image[offsetY:offsetY+taille_fenetre, offsetX:offsetX+taille_fenetre]
                 newImage.append(fenetre.flatten())
-                offsetX = offsetX + taille_fenetre/2
+                offsetX = offsetX + int(taille_fenetre*(1-recouvrement))
             offsetX = 0
-            offsetY = offsetY + taille_fenetre/2
+            offsetY = offsetY + int(taille_fenetre*(1-recouvrement))
         return np.array(newImage)
 
     @staticmethod
     # Fonction pour recomposer une image qui a ete prealablement decoupe par une fenetre de taille fixee
-    def recomposer_image(image_decomposee, taille_imageX, taille_imageY, taille_fenetre):
+    def recomposer_image(image_decomposee, taille_imageX, taille_imageY, taille_fenetre, recouvrement=0.5):
         offsetX = 0
         offsetY = 0
         newImage = [[[] for i in range(taille_imageX)] for _ in range(taille_imageY)]
@@ -80,10 +81,10 @@ class SuperScale(DenseDesignMatrix):
             for j in range(taille_fenetre):
                 for k in range(taille_fenetre):
                     newImage[offsetY+j][offsetX+k].append(image_decomposee[i, j*taille_fenetre+k])
-            offsetX = offsetX + taille_fenetre/2
+            offsetX = offsetX + int(taille_fenetre*(1-recouvrement))
             if offsetX+taille_fenetre > taille_imageX:
                 offsetX = 0
-                offsetY = offsetY + taille_fenetre/2
+                offsetY = offsetY + int(taille_fenetre*(1-recouvrement))
 
         for i in range(taille_imageY):
             for j in range(taille_imageX):
