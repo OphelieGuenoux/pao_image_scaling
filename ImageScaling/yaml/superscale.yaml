@@ -5,19 +5,19 @@
          !obj:pylearn2.models.mlp.Sigmoid {
             layer_name: 'h1',
             dim: 82,
-            irange: 0.,
+            irange: 1.,
           },
          !obj:pylearn2.models.mlp.Sigmoid {
             layer_name: 'y',
             dim: 100,
-            irange: 0.,
+            irange: 1.,
          }
       ],
       "nvis": 64,
    },
    "algorithm": !obj:pylearn2.training_algorithms.sgd.SGD {
       "learning_rate" : 0.001,
-      "batch_size" : 1, #mettre 1 a la place
+      "batch_size" : 1,
       "monitoring_batches" : 1,
       "monitoring_dataset": {
          "train": *train,
@@ -36,9 +36,9 @@
       },
       !obj:pylearn2.training_algorithms.sgd.LinearDecayOverEpoch {
          "start" : 4,
-         "saturate" : 20,
-         "decay_factor" : 0.01
+         "saturate" : 30,
+         "decay_factor" : 0.0001
       },
-      !obj:pylearn2.train_extensions.live_monitoring.LiveMonitoring {},
+      #!obj:pylearn2.train_extensions.live_monitoring.LiveMonitoring {},
    ]
 }
