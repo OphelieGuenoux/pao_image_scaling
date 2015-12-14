@@ -39,6 +39,6 @@
          "saturate" : 30,
          "decay_factor" : 0.0001
       },
-      #!obj:pylearn2.train_extensions.live_monitoring.LiveMonitoring {},
+      !obj:pylearn2.train_extensions.live_monitoring.LiveMonitoring {},
    ]
 }

@@ -5,10 +5,11 @@ from pylearn2.termination_criteria import EpochCounter
 from pylearn2.datasets.dense_design_matrix import DenseDesignMatrix
 from pylearn2.train_extensions.live_monitoring import LiveMonitoring
 
+import threading
 import numpy as np
 from scipy.misc import imread
 from scipy.misc import imsave
-import os 
+import os
 
 class SuperScale(DenseDesignMatrix):
     Xtrain = np.array([])
@@ -22,38 +23,50 @@ class SuperScale(DenseDesignMatrix):
     quantite_a_retirer_output = 0;
     quantite_a_diviser_output = 255;
 
-    nbValeursTrain = 16000;
+    nbValeursTrain = 22000;
     taille_fenetre_input = 8;
     taille_fenetre_output = 10;
     recouvrement = 0;
 
-    # initData permet d'initialiser les donnees d'apprentissages et de validations a partir d'images. Une fois genere on peut soit
-    # choisir la matrice d'apprentissage ou de validation grace au Constructeur
     @staticmethod
-    def initData():
+    def initInput():
         input = []
         for im in os.listdir("./dataset/images_input"):
             image = imread("./dataset/images_input/"+im, flatten=1)
             imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_input, SuperScale.recouvrement)
-            print np.array(input).shape
             input.extend(imageDecoupe)
         SuperScale.Xtrain = (np.array(input[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer_input)/SuperScale.quantite_a_diviser_input #si on met -1 1 mieux
         SuperScale.Xtrain = SuperScale.Xtrain.astype(int)
         SuperScale.Xval = (np.array(input[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer_input)/SuperScale.quantite_a_diviser_input
         SuperScale.Xval = SuperScale.Xval.astype(int)
 
+    @staticmethod
+    def initOutput():
         output = []
         for im in os.listdir("./dataset/images_output"):
             image = imread("./dataset/images_output/"+im, flatten=1)
             imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_output, SuperScale.recouvrement)
-            print np.array(output).shape
             output.extend(imageDecoupe)
         SuperScale.ytrain = (np.array(output[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer_output)/SuperScale.quantite_a_diviser_output
         SuperScale.ytrain = SuperScale.ytrain.astype(int)
         SuperScale.yval = (np.array(output[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer_output)/SuperScale.quantite_a_diviser_output
         SuperScale.yval = SuperScale.yval.astype(int)
 
-        print "Donnees crees, input: %s output: %s" % (np.array(input).shape, np.array(output).shape)
+    # initData permet d'initialiser les donnees d'apprentissages et de validations a partir d'images. Une fois genere on peut soit
+    # choisir la matrice d'apprentissage ou de validation grace au Constructeur
+    @staticmethod
+    def initData():
+        initInputThread = threading.Thread(target=SuperScale.initInput)
+        initOutputThread = threading.Thread(target=SuperScale.initOutput)
+
+        initOutputThread.start()
+        initInputThread.start()
+
+        initOutputThread.join()
+        initInputThread.join()
+
+        print "Donnees crees apprentissage, input: %s output: %s" % (np.array(SuperScale.Xtrain).shape, np.array(SuperScale.ytrain).shape)
+        print "Donnees crees validation, input: %s output: %s" % (np.array(SuperScale.Xval).shape, np.array(SuperScale.yval).shape)
     #----------------------------------------------------------------------------------------------#
 
 
