@@ -1,9 +1,6 @@
 import theano
-from pylearn2.models import mlp
-from pylearn2.training_algorithms import sgd
-from pylearn2.termination_criteria import EpochCounter
 from pylearn2.datasets.dense_design_matrix import DenseDesignMatrix
-from pylearn2.train_extensions.live_monitoring import LiveMonitoring
+from pylearn2.utils import serial
 
 import threading
 import numpy as np
@@ -28,17 +25,17 @@ class SuperScale(DenseDesignMatrix):
     taille_fenetre_output = 10;
     recouvrement = 0;
 
+    model_path = 'mlp_best.pkl'
+
     @staticmethod
     def initInput():
         input = []
         for im in os.listdir("./dataset/images_input"):
             image = imread("./dataset/images_input/"+im, flatten=1)
             imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_input, SuperScale.recouvrement)
-            input.extend(imageDecoupe) #mieux de séparer base d app et vali avant avoir fait les patch 
-        SuperScale.Xtrain = (np.array(input[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer_input)/SuperScale.quantite_a_diviser_input #si on met -1 1 mieux
-        SuperScale.Xtrain = SuperScale.Xtrain
-        SuperScale.Xval = (np.array(input[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer_input)/SuperScale.quantite_a_diviser_input
-        SuperScale.Xval = SuperScale.Xval
+            input.extend(imageDecoupe)
+        SuperScale.Xtrain = SuperScale.centrer_reduire( np.array( input[0:SuperScale.nbValeursTrain] ) )
+        SuperScale.Xval = SuperScale.centrer_reduire( np.array( input[SuperScale.nbValeursTrain+1:]) )
 
     @staticmethod
     def initOutput():
@@ -47,17 +44,15 @@ class SuperScale(DenseDesignMatrix):
             image = imread("./dataset/images_output/"+im, flatten=1)
             imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_output, SuperScale.recouvrement)
             output.extend(imageDecoupe)
-        SuperScale.ytrain = (np.array(output[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer_output)/SuperScale.quantite_a_diviser_output
-        SuperScale.ytrain = SuperScale.ytrain #la
-        SuperScale.yval = (np.array(output[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer_output)/SuperScale.quantite_a_diviser_output
-        SuperScale.yval = SuperScale.yval #la
+        SuperScale.ytrain = SuperScale.centrer_reduire( np.array( output[0:SuperScale.nbValeursTrain] ) )
+        SuperScale.yval = SuperScale.centrer_reduire( np.array( output[SuperScale.nbValeursTrain+1:] ) )
 
     # initData permet d'initialiser les donnees d'apprentissages et de validations a partir d'images. Une fois genere on peut soit
     # choisir la matrice d'apprentissage ou de validation grace au Constructeur
     @staticmethod
     def initData():
-        initInputThread = threading.Thread(target=SuperScale.initInput)
-        initOutputThread = threading.Thread(target=SuperScale.initOutput)
+        initInputThread = threading.Thread(target = SuperScale.initInput)
+        initOutputThread = threading.Thread(target = SuperScale.initOutput)
 
         initOutputThread.start()
         initInputThread.start()
@@ -119,6 +114,77 @@ class SuperScale(DenseDesignMatrix):
 
         return np.array(newImage)
     #----------------------------------------------------------------------------------------------#
+
+    @staticmethod
+    def centrer_reduire(image):
+        return np.array((image-SuperScale.quantite_a_retirer_input)/SuperScale.quantite_a_diviser_input)
+
+    @staticmethod
+    def centrer_reduire_inverse(image):
+        return image*SuperScale.quantite_a_diviser_input+SuperScale.quantite_a_retirer_input
+
+    @staticmethod
+    def seuillage(image, seuil_bas=0.3, seuil_haut=0.7):
+        [n, p] = np.shape(image)
+        for i in range(n):
+            for j in range(p):
+                if image[i,j] < seuil_bas:
+                    image[i,j] = 0.0;
+                if image[i,j] > seuil_haut:
+                    image[i,j] = 1.0;
+
+
+    @staticmethod
+    def reconstruction(image):
+        model = serial.load( SuperScale.model_path )
+        X = model.get_input_space().make_theano_batch()
+        Y = model.fprop( X )
+        f = theano.function( [X], Y )
+
+        [n, p] = np.shape(image)
+        imageReconstruite = np.zeros((n, 100))
+        for i in range(n):
+            imageReconstruite[i] = f([image[i]])
+        return imageReconstruite
+
+    @staticmethod
+    def upscaling_traitement(image, taille_image_depart_X=32, taille_image_depart_Y=32, taille_image_finale_X=40, taille_image_finale_Y=40):
+        image = SuperScale.centrer_reduire( image )
+        # On decompose l'image en patchs de 8x8 avec un recouvrement de moitie
+        imageDecompo = SuperScale.decouper_image(image, 8, 0.5)
+        # On lance l'upscaling ici !
+        imageReconstruite = SuperScale.reconstruction(imageDecompo)
+        # On recompose l'image apres l'avoir agrandi a partir de patchs de 10x10 et toujours un recouvrement de moitie
+        imageReconstruite = SuperScale.recomposer_image(imageReconstruite, taille_image_finale_X, taille_image_finale_Y, 10, 0.5)
+        # On applique un seuillage pour eliminer d'eventuelle bruits
+        SuperScale.seuillage( imageReconstruite )
+        # On remet l'image dans le domaine de depart
+        imageReconstruite = SuperScale.centrer_reduire_inverse( imageReconstruite )
+        return imageReconstruite
+
+    @staticmethod
+    def upscaling(image_path, output_path, taille_image_depart_X=32, taille_image_depart_Y=32, taille_image_finale_X=40, taille_image_finale_Y=40):
+        # On recupere le nom du fichier
+        nom = image_path.split("/")[-1:][0].split(".")[0]
+        # On centre et reduit l'image d'entree
+        imageTest = imread(image_path, flatten=1)
+        # On sauvegarde l'image original
+        imsave( output_path+"/"+nom+"_original.png", imageTest.reshape(( taille_image_depart_X,  taille_image_depart_Y )) )
+        imageReconstruite = SuperScale.upscaling_traitement(imageTest, taille_image_depart_X, taille_image_depart_Y, taille_image_finale_X, taille_image_finale_Y)
+        # On sauvegarde l'image ainsi obtenue
+        imsave( output_path+"/"+nom+"_reconstruction.png", imageReconstruite)
+
+    @staticmethod
+    def upscalingRGB(image_path, output_path, taille_image_depart_X=32, taille_image_depart_Y=32, taille_image_finale_X=40, taille_image_finale_Y=40):
+        nom = image_path.split("/")[-1:][0].split(".")[0]
+
+        imageTest = imread(image_path)
+        imageFinal = np.zeros((taille_image_finale_X, taille_image_finale_Y, 3), dtype=np.uint8)
+        for layer in range(3):
+            imageFinal[..., layer] = SuperScale.upscaling_traitement(imageTest[..., layer], taille_image_depart_X, taille_image_depart_Y, taille_image_finale_X, taille_image_finale_Y)
+
+        imsave( output_path+"/"+nom+"_original.png", imageTest )
+        imsave( output_path+"/"+nom+"_reconstruction.png", imageFinal)
 
 
     # Constructeur de SuperScale, permet soit de considerer les donnees de tests ou de validations

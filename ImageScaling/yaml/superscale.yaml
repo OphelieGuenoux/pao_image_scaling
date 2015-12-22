@@ -4,19 +4,36 @@
       "layers": [
          !obj:pylearn2.models.mlp.Sigmoid {
             layer_name: 'h1',
-            dim: 82,
-            irange: 1.,
+            dim: 75,
+            irange: .5,
           },
-         !obj:pylearn2.models.mlp.Sigmoid {
-            layer_name: 'y',
-            dim: 100,
-            irange: 1.,
-         }
+          !obj:pylearn2.models.mlp.RectifiedLinear {
+             layer_name: 'h2',
+             dim: 90,
+             irange: .5,
+             max_col_norm: 1.0,
+           },
+           !obj:pylearn2.models.mlp.LinearGaussian {
+              init_bias: !obj:pylearn2.models.mlp.mean_of_targets { dataset: *train },
+              init_beta: !obj:pylearn2.models.mlp.beta_from_targets { dataset: *train },
+              min_beta: 1.,
+              max_beta: 100.,
+              beta_lr_scale: 1.,
+              dim: 100,
+              # max_col_norm: 1.9365,
+              layer_name: 'y',
+              irange: .5,
+          }
+         #!obj:pylearn2.models.mlp.Sigmoid {
+        #    layer_name: 'y',
+        #    dim: 100,
+        #    irange: .5,
+         #}
       ],
       "nvis": 64,
    },
    "algorithm": !obj:pylearn2.training_algorithms.sgd.SGD {
-      "learning_rate" : 0.001,
+      "learning_rate" : 0.01,
       "batch_size" : 1,
       "monitoring_batches" : 1,
       "monitoring_dataset": {
@@ -26,18 +43,14 @@
       "termination_criterion": !obj:pylearn2.termination_criteria.EpochCounter {
          "max_epochs": 1000,
       },
+      learning_rule: !obj:pylearn2.training_algorithms.learning_rule.AdaGrad {},
    },
    "save_path": "./model_fin.pkl",
    "save_freq": 1,
    "extensions": [
       !obj:pylearn2.train_extensions.best_params.MonitorBasedSaveBest {
-         "channel_name": 'valid_objective',
+         "channel_name": 'valid_y_mse',
          "save_path": "./mlp_best.pkl"
-      },
-      !obj:pylearn2.training_algorithms.sgd.LinearDecayOverEpoch {
-         "start" : 4,
-         "saturate" : 30,
-         "decay_factor" : 0.0001
       },
       !obj:pylearn2.train_extensions.live_monitoring.LiveMonitoring {},
    ]
