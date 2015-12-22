@@ -34,11 +34,11 @@ class SuperScale(DenseDesignMatrix):
         for im in os.listdir("./dataset/images_input"):
             image = imread("./dataset/images_input/"+im, flatten=1)
             imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_input, SuperScale.recouvrement)
-            input.extend(imageDecoupe)
+            input.extend(imageDecoupe) #mieux de séparer base d app et vali avant avoir fait les patch 
         SuperScale.Xtrain = (np.array(input[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer_input)/SuperScale.quantite_a_diviser_input #si on met -1 1 mieux
-        SuperScale.Xtrain = SuperScale.Xtrain.astype(int)
+        SuperScale.Xtrain = SuperScale.Xtrain
         SuperScale.Xval = (np.array(input[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer_input)/SuperScale.quantite_a_diviser_input
-        SuperScale.Xval = SuperScale.Xval.astype(int)
+        SuperScale.Xval = SuperScale.Xval
 
     @staticmethod
     def initOutput():
@@ -48,9 +48,9 @@ class SuperScale(DenseDesignMatrix):
             imageDecoupe = SuperScale.decouper_image(image, SuperScale.taille_fenetre_output, SuperScale.recouvrement)
             output.extend(imageDecoupe)
         SuperScale.ytrain = (np.array(output[0:SuperScale.nbValeursTrain])-SuperScale.quantite_a_retirer_output)/SuperScale.quantite_a_diviser_output
-        SuperScale.ytrain = SuperScale.ytrain.astype(int)
+        SuperScale.ytrain = SuperScale.ytrain #la
         SuperScale.yval = (np.array(output[SuperScale.nbValeursTrain+1:])-SuperScale.quantite_a_retirer_output)/SuperScale.quantite_a_diviser_output
-        SuperScale.yval = SuperScale.yval.astype(int)
+        SuperScale.yval = SuperScale.yval #la
 
     # initData permet d'initialiser les donnees d'apprentissages et de validations a partir d'images. Une fois genere on peut soit
     # choisir la matrice d'apprentissage ou de validation grace au Constructeur
@@ -117,7 +117,7 @@ class SuperScale(DenseDesignMatrix):
                 else:
                     newImage[i][j] = 0
 
-        return np.array(newImage).astype(int)
+        return np.array(newImage)
     #----------------------------------------------------------------------------------------------#
 
 
