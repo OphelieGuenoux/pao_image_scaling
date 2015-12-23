@@ -6,6 +6,7 @@ import threading
 import numpy as np
 from scipy.misc import imread
 from scipy.misc import imsave
+from PIL import Image
 import os
 
 class SuperScale(DenseDesignMatrix):
@@ -124,7 +125,7 @@ class SuperScale(DenseDesignMatrix):
         return image*SuperScale.quantite_a_diviser_input+SuperScale.quantite_a_retirer_input
 
     @staticmethod
-    def seuillage(image, seuil_bas=0.3, seuil_haut=0.7):
+    def seuillage(image, seuil_bas=0.0, seuil_haut=1.0):
         [n, p] = np.shape(image)
         for i in range(n):
             for j in range(p):
@@ -178,7 +179,10 @@ class SuperScale(DenseDesignMatrix):
     def upscalingRGB(image_path, output_path, taille_image_depart_X=32, taille_image_depart_Y=32, taille_image_finale_X=40, taille_image_finale_Y=40):
         nom = image_path.split("/")[-1:][0].split(".")[0]
 
-        imageTest = imread(image_path)
+        imageTest = Image.open(image_path)
+        if imageTest.mode == 'P':
+            imageTest = imageTest.convert('RGB')
+        imageTest = np.asarray(imageTest)
         imageFinal = np.zeros((taille_image_finale_X, taille_image_finale_Y, 3), dtype=np.uint8)
         for layer in range(3):
             imageFinal[..., layer] = SuperScale.upscaling_traitement(imageTest[..., layer], taille_image_depart_X, taille_image_depart_Y, taille_image_finale_X, taille_image_finale_Y)

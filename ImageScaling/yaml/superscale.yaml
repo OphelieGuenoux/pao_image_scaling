@@ -33,7 +33,7 @@
       "nvis": 64,
    },
    "algorithm": !obj:pylearn2.training_algorithms.sgd.SGD {
-      "learning_rate" : 0.01,
+      "learning_rate" : 0.001,
       "batch_size" : 1,
       "monitoring_batches" : 1,
       "monitoring_dataset": {
@@ -53,5 +53,15 @@
          "save_path": "./mlp_best.pkl"
       },
       !obj:pylearn2.train_extensions.live_monitoring.LiveMonitoring {},
+      !obj:pylearn2.training_algorithms.sgd.MonitorBasedLRAdjuster {
+         "high_trigger": 0.95,
+         "low_trigger": 0.0,
+         "grow_amt": 2,
+         "shrink_amt": 0.5,
+         "max_lr": 0.3,
+         "min_lr": 0.000000001,
+         "dataset_name": 'valid',
+         "channel_name": 'valid_y_mse'
+       },
    ]
 }

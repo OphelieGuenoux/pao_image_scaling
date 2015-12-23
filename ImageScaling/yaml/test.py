@@ -17,8 +17,12 @@ SuperScale.upscaling("./tests/images/57-2.png", "./tests")
 SuperScale.upscaling("./tests/images/57-3.png", "./tests")
 SuperScale.upscaling("./tests/images/57-4.png", "./tests")
 SuperScale.upscaling("./tests/images/5_grosse.png", "./tests", 64, 64, 80, 80)
-SuperScale.upscaling("./tests/images/oiseau.png", "./tests", 256, 256, 320, 320)
-
+SuperScale.upscalingRGB("./tests/images/oiseau.png", "./tests", 256, 256, 320, 320)
+SuperScale.upscaling("./tests/images/53.png", "./tests")
+SuperScale.upscaling("./tests/images/177.png", "./tests")
+SuperScale.upscaling("./tests/images/119.png", "./tests")
+SuperScale.upscaling("./tests/images/212.png", "./tests")
+SuperScale.upscalingRGB("./tests/images/rectangleR.png","./tests")
 
 #roundval = 100
 
