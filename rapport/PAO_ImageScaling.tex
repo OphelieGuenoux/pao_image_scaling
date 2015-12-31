@@ -131,11 +131,38 @@ Cependant, nous avons vite été confronté à un problème, sa taille. En effet
 	\subsection{Utilisation de Patchs}
 	% mettre des images en entier sur le réseau -> beaucoup trop lent. Du coup réduction de la taille du réseau en ne passant que les patchs
 	% deux nouveaux algo pour découper l'image en patch et pour la reformer
+Les images que nous utilisons sont de taille 32 par 32 pixels. Au départ nous avions pensé créer un réseau avec une entrée de dimension $32 \times 32 = 1024$ pour avoir en sortie une image agrandie $40 \times 40 = 1600$. Mais nous n'obtenions pas de résultats concluant et la taille du réseau rendant l'apprentissage très long. Nous avons donc imaginé découper les images en patchs.
+\\
+
+Après avoir soumis l'idée à nos encadrants, nous avons pris la décision de découper les images d'entrées en patchs de taille $8 \times 8$ avec un recouvrement de moitié. Pour obtenir le même nombre de patchs en entrée et en sortie, nous avons décidé de prendre des patchs de sortie de $10 \times 10$ ce qui nous fait donc une image finale de taille $40 \times 40$. L'image est reconstruite en superposant les patchs avec toujours un recouvrement de moitié et en faisant la moyenne des valeurs des pixels qui se recouvrent. 
+\\
+
+Finalement nous utilisons une fonction de seuillage pour éviter d'obtenir des valeurs inférieurs à zéro ou supérieur à 255.
+
 	\subsection{Structure du réseau}
 	% nb couche
-	\subsubsection{Changement des fonctions d'activation}
+Durant le projet nous avons essayé plusieurs architectures de réseau. Au début nous avons fait l'erreur de ne pas faire suffisamment attention à l'ensemble d'arrivé des fonctions d'activations que nous utilisions. Mais finalement nous avons obtenu une architecture satisfaisante.
+
+	\subsubsection{Les fonctions d'activation}
 	% erreur de domaine de nos données, SIgmoid prend entre -inf et +inf pour ressortir en 0 et 1 ; 
-	% ajouter un shéma pour expliquer les différentes couches 
+	% ajouter un shéma pour expliquer les différentes couches
+Initialement nous avons choisi comme fonction d'activation sur deux couches une Sigmoid. Cependant l'ensemble de définition d'une Sigmoid est entre -inf et +inf et l'ensemble d'arrivé 0 et 1. Donc en sortie de la première couche les valeurs sont comprisent entre 0 et 1. En passant dans la seconde couche les données sont donc entre 0.5 et 1 ce qui n'est pas satisfaisant. 
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.4]{Images/sigmoid.png}
+  \caption{Fonction Sigmoid}
+\end{figure}
+
+Après des recherches nous avons trouvé l'architecture suivante:
+Tout d'abord une couche Sigmoid, puis RectifiedLinear et finalement GaussianLinear en couche de sortie.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=1]{Images/architecture.png}
+  \caption{Architecture du réseau final}
+\end{figure}
+
 \section{Problèmes rencontrés}
 	\subsection{Le problème du pas}
 	% Avant nous baissions tout simplement le learning rate ds une certaines fourchette d'epochs
