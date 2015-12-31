@@ -1,6 +1,6 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[french]{babel}
+%\usepackage[french]{babel}
 \usepackage{amsfonts}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -22,7 +22,7 @@
 
 \title{Rapport de projet}
 \author{Ophélie Guenoux \\Olivier Petit}
-\date{janvier 2016}
+\date{Janvier 2016}
 
 \begin{document}
 
@@ -50,6 +50,35 @@
 \end{titlepage}
 
 \newpage
+\tableofcontents
+\newpage
+\section*{Introduction}
 
+\section{État de l'art}
+\section{Choix de la librairie}
+Pour effectuer de l'agrandissement d'image, nous souhaitons utilisez des réseaux de neurones. De ce fait, nousavons commencé à nous renseigner sur les différentes librairies. 
 
+ Nous THeoano librairie machine learning reconnu pour sa stabilité
+\subsection{Utilisation de \emph{YAML} avec Python}
+
+\section{Les différentes étapes du projet}
+	\subsection{Choix et construction du Dataset}
+
+	\subsection{Utilisation de Patchs}
+	% mettre des images en entier sur le réseau -> beaucoup trop lent. Du coup réduction de la taille du réseau en ne passant que les patchs
+	% deux nouveaux algo pour découper l'image en patch et pour la reformer
+	\subsection{Structure du réseau}
+	% nb couche
+	\subsubsection{Changement des fonctions d'activation}
+	% erreur de domaine de nos données, SIgmoid prend entre -inf et +inf pour ressortir en 0 et 1 ; 
+	% ajouter un shéma pour expliquer les différentes couches 
+\section{Problèmes rencontrés}
+	\subsection{Le problème du pas}
+	% Avant nous baissions tout simplement le learning rate ds une certaines fourchette d'epochs
+	% tente d'utiliser un algo plus "intelligent" qui regarde 1 channel +val de sortie et par rapport à cette valeur fait augmenter ou dim le LR
+	\subsection{Upscalling-RGB}
+	% tentative de faire un réseau de neurones capable de faire de l'upscalling avec des images en couleur. 
+	% -> problème notre image de sortie est en niveau de bleu principalement
+
+\section*{Conclusion}
 \end{document}
