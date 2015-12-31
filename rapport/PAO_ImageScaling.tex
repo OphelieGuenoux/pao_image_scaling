@@ -55,6 +55,43 @@
 \section*{Introduction}
 
 \section{État de l'art}
+
+\subsection{Image Scaling}
+L'\textit{image scaling} est l'expression anglaise désignant les procédés informatiques liés à l'agrandissement ou la réduction de la taille d'une image.
+
+Il existe deux familles d'image, les images vectoriels et les images matriciels. Dans le cas d'images vectoriels l'agrandissement et la réduction sont effectués par le recalcul de l'images à partir d'équations stockées dans le fichier. De cette manière nous pouvons obtenir une image lisse quelque soit le coefficient d'échelle appliqué. Ce recalcul est cependant coûteux en temps et ressources. C'est la raison pour laquelle les images matriciel sont plus répandues. Ce type d'image consiste simplement en une matrice de trois dimensions, pour la largeur, la hauteur, et les trois ou quatre canaux de couleurs. Des algorithmes de compressions permettent de faciliter le stockage mais aussi la transmission car dans le cas contraire les images peuvent être assez "lourdes".
+
+Dans de nombreuses application les images matriciels sont préférées. Par exemple dans les anciens jeux-vidéos, les icônes, et toutes les images généralement sur internet. Là où les temps de chagement doivent être minimum.
+
+Cependant il peut être intéressant de vouloir modifier la taille d'une image pour s'adapter par exemple aux différents types d'écrans. De plus avec l'augmentation de la résolution des écrans, certaines images doivent être très petites pour être affichées correctement. Le meilleur exemple étant la remasterisation d'anciens jeux vidéos.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.7]{Images/tele.png}
+  \caption{Upscaling x2}
+\end{figure}
+
+\subsection{Agrandissement}
+ 
+L'augmentation de la taille d'une image revient à "créer" de nouveaux pixels qu'il faudrait remplir le mieux possible afin de garder une continuité.
+
+L'algorithme le plus simple est celui du plus proche voisin. Il est très rapide mais fourni un résultat pixélisé 
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.6]{Images/plus_proche_voisin.png}
+  \caption{Algorithme du plus proche voisin}
+\end{figure}
+
+De très nombreux algorithme existent, certain développés par de très grands laboratoires. Une liste exhaustive est diposible ici
+
+\url{https://en.wikipedia.org/wiki/Image_scaling#Pixel_art_scaling_algorithms}
+
+\subsection{Réduction}
+
+La réduction d'une image est un procédé plus simple car il consiste généralement à supprimer des pixels régulièrement (par exemple un sur deux).
+
+
 \section{Choix de la librairie}
 Pour notre projet, nous souhaitions agrandir des images avec un réseau de neurones. De ce fait, nous avons commencé à nous renseigner sur les différentes librairies. \\ Parmi elles, Pylearn2 qui nous avait été justement conseiller par nos encadrants. 
 \subsection{Theano et Pylearn2}
