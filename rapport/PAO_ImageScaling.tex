@@ -1,0 +1,55 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{url}
+\usepackage[usenames,dvipsnames]{color}
+
+\usepackage[top=3.3cm, bottom=3.3cm, left=2cm, right=2cm]{geometry}
+
+\renewcommand{\baselinestretch}{1.2}
+
+\pagestyle{fancy}
+\usepackage{lastpage}
+\renewcommand\headrulewidth{1pt}
+\fancyhead[L]{Image UpScaling}
+\fancyhead[R]{INSA de Rouen}
+\renewcommand\footrulewidth{1pt}
+\fancyfoot[C]{\textbf{Page \thepage/\pageref{LastPage}}}
+\fancyfoot[R]{\includegraphics[width=0.10\textwidth]{Images/Logo_INSA.png}}
+
+\title{Rapport de projet}
+\author{Ophélie Guenoux \\Olivier Petit}
+\date{janvier 2016}
+
+\begin{document}
+
+\makeatletter
+\begin{titlepage}
+  \begin{center}
+      \includegraphics[width=0.20\textwidth]{Images/Logo_INSA.png}
+      \hfill
+      \includegraphics[width=0.25\textwidth]{Images/logoasi.png}\\
+    \vspace{1cm}
+		\Huge \underline{\@title} 
+			\\ \textsc{Image UpScaling}
+			\\ \Large Projet d'Approfondissement et d'Ouverture
+			\vspace{1cm}
+			\begin{figure}[h!]
+				\centering
+				%\includegraphics[width=0.7\textwidth]{Images/radcul.jpg}
+			\end{figure}
+	\vspace{1cm}
+	\end{center}
+	\raggedright
+	\large Ophélie Guenoux \hfill Encadrant : M.Chatelain \& M.Herault
+	\\Olivier Petit \hfill INSA Rouen ASI4
+	
+\end{titlepage}
+
+\newpage
+
+
+\end{document}
