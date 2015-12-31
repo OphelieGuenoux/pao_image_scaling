@@ -56,14 +56,41 @@
 
 \section{État de l'art}
 \section{Choix de la librairie}
-Pour effectuer de l'agrandissement d'image, nous souhaitons utilisez des réseaux de neurones. De ce fait, nousavons commencé à nous renseigner sur les différentes librairies. 
+Pour notre projet, nous souhaitions agrandir des images avec un réseau de neurones. De ce fait, nous avons commencé à nous renseigner sur les différentes librairies. \\ Parmi elles, Pylearn2 qui nous avait été justement conseiller par nos encadrants. 
+\subsection{Theano et Pylearn2}
+Notre choix s'est donc orienté vers Pylearn2 une librairie opensource sous license BSD qui utilise Theano (librairie machine-learning reconnue).
+\\ De plus, c'est une librairie python, langage que nous connaissions.
+\\
 
- Nous THeoano librairie machine learning reconnu pour sa stabilité
+Pylearn2 est avant tout une librairie de machine learning permettant de résoudre des problèmes de toutes sortes.(Clustering, classification, etc...)
+\\De plus, la librairie implémente un ensemble de fonctions liées à la création de réseaux de neurones artificiels. Il s'agit de la classe MLP (\emph{multi layers perceptron}), qui contient toutes les types de couches connues. \\ Par exemple, dans le code suivant, nous créons un réseau de neurones contenant une couche de 75 neurones avec comme fonction d'activation une \emph{Sigmoid}
+\begin{verbatim}
+"model": !obj:pylearn2.models.mlp.MLP {
+  "layers": [
+   !obj:pylearn2.models.mlp.Sigmoid {
+     layer_name: 'h1',
+     dim: 75,
+     irange: .5,
+   },
+ ]
+}
+\end{verbatim}
 \subsection{Utilisation de \emph{YAML} avec Python}
+Pylearn2 permet la définition d'un modèle de machine learning grâce à un script en \emph{YAML}.\\ L'exemple précédent est un extrait du script \emph{YAML} utilisé dans notre projet. 
+\\
+
+Initialement, pour bien comprendre le fonctionnement de la bibliothèque, nous avions réalisé une première version du projet uniquement avec des scripts Python. 
+\\ Cependant, nous nous sommes très vite rendu compte des limites que cela engendrait. En effet, le code était devenu lourd et difficile à utiliser. 
+\\
+
+Par la suite, nous avons donc utilisé \emph{YAML} avec Python comme proposé par Pylearn2. Le côté architecture du réseau de neurones centralisé dans les scripts \emph{YAML} et le reste gérer par les scripts Python. 
 
 \section{Les différentes étapes du projet}
 	\subsection{Choix et construction du Dataset}
-
+Au commencement du projet, il était question de faire un Dataset composé de chiffre allant de 0 à 9. 
+Cependant, nous avons vite été confronté à un problème, sa taille. En effet, notre Dataset n'était composé que de 50 éléments, ce qui est largement insuffisant pour que l'apprentissage soit efficace.
+\\ Nous avons donc décidé de changer les données utilisées en images 32 pixels par 32, noir et blanc, représentant des ellipses et des rectangles.
+ 
 	\subsection{Utilisation de Patchs}
 	% mettre des images en entier sur le réseau -> beaucoup trop lent. Du coup réduction de la taille du réseau en ne passant que les patchs
 	% deux nouveaux algo pour découper l'image en patch et pour la reformer
