@@ -1,6 +1,6 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[french]{babel}
+%\usepackage[french]{babel}
 \usepackage{amsfonts}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -57,13 +57,15 @@
 \section{État de l'art}
 
 \subsection{Image Scaling}
-L'\textit{image scaling} est l'expression anglaise désignant les procédés informatiques liés à l'agrandissement ou la réduction de la taille d'une image.
+L'\textit{image scaling} est l'expression anglaise désignant les procédés informatiques liés à \\
+l'agrandissement ou la réduction de la taille d'une image.
 
-Il existe deux familles d'image, les images vectoriels et les images matriciels. Dans le cas d'images vectoriels l'agrandissement et la réduction sont effectués par le recalcul de l'images à partir d'équations stockées dans le fichier. De cette manière nous pouvons obtenir une image lisse quelque soit le coefficient d'échelle appliqué. Ce recalcul est cependant coûteux en temps et ressources. C'est la raison pour laquelle les images matriciel sont plus répandues. Ce type d'image consiste simplement en une matrice de trois dimensions, pour la largeur, la hauteur, et les trois ou quatre canaux de couleurs. Des algorithmes de compressions permettent de faciliter le stockage mais aussi la transmission car dans le cas contraire les images peuvent être assez "lourdes".
+Il existe deux familles d'images, les images vectorielles et les images matricielles. Dans le cas d'images vectorielles l'agrandissement et la réduction sont effectués par le recalcul de l'image à partir d'équations stockées dans le fichier. De cette manière nous pouvons obtenir une image lisse quelque soit le coefficient d'échelle appliqué. Ce recalcul est cependant coûteux en temps et ressources. C'est la raison pour laquelle les images matricielles sont plus répandues. Ce type d'image consiste en une matrice de trois dimensions, la largeur, la hauteur, et les trois ou quatre canaux de couleurs. \\Des algorithmes de compressions permettent de faciliter le stockage mais aussi la transmission car dans le cas contraire les images peuvent être assez "lourdes".
 
-Dans de nombreuses application les images matriciels sont préférées. Par exemple dans les anciens jeux-vidéos, les icônes, et toutes les images généralement sur internet. Là où les temps de chagement doivent être minimum.
+Dans de nombreuses applications les images matricielles sont préférées. Par exemple dans les anciens jeux-vidéos, mais aussi dans les icônes ainsi que dans la majorité des images que l'on trouve sur internet. Là où les temps de chargement doivent être minimum.
+\\
 
-Cependant il peut être intéressant de vouloir modifier la taille d'une image pour s'adapter par exemple aux différents types d'écrans. De plus avec l'augmentation de la résolution des écrans, certaines images doivent être très petites pour être affichées correctement. Le meilleur exemple étant la remasterisation d'anciens jeux vidéos.
+Cependant à cause de certaines contraintes, il peut être intéressant de modifier la taille d'une image. Par exemple pour s'adapter aux différents types d'écrans. De plus avec l'augmentation de la résolution des écrans, certaines images doivent être très petites pour être affichées correctement. Le meilleur exemple étant la remasterisation d'anciens jeux vidéos.
 
 \begin{figure}[h!]
   \centering
@@ -75,7 +77,7 @@ Cependant il peut être intéressant de vouloir modifier la taille d'une image p
  
 L'augmentation de la taille d'une image revient à "créer" de nouveaux pixels qu'il faudrait remplir le mieux possible afin de garder une continuité.
 
-L'algorithme le plus simple est celui du plus proche voisin. Il est très rapide mais fourni un résultat pixélisé 
+L'algorithme le plus simple est celui du plus proche voisin. Il est très rapide mais fourni un résultat pixélisé. 
 
 \begin{figure}[h!]
   \centering
@@ -83,20 +85,20 @@ L'algorithme le plus simple est celui du plus proche voisin. Il est très rapide
   \caption{Algorithme du plus proche voisin}
 \end{figure}
 
-De très nombreux algorithme existent, certain développés par de très grands laboratoires. Une liste exhaustive est diposible ici
+De très nombreux algorithmes existent, certain développés par d'importants laboratoires. Une liste exhaustive est disponible ici:
 
 \url{https://en.wikipedia.org/wiki/Image_scaling#Pixel_art_scaling_algorithms}
 
 \subsection{Réduction}
 
-La réduction d'une image est un procédé plus simple car il consiste généralement à supprimer des pixels régulièrement (par exemple un sur deux). Il n'existe pas réelement de problèmes liés à ces algorithmes car ils sont très simples à mettre en oeuvre et rapide à l'exécution.
+La réduction d'une image est un procédé plus simple car il consiste généralement à supprimer des pixels de façon régulière(par exemple un sur deux). Il n'existe pas vraiment de problèmes liés à ces algorithmes car ils sont très simples à mettre en œuvre et l'exécution est peu complexe.
 
 
 \section{Choix de la librairie}
-Pour notre projet, nous souhaitions agrandir des images avec un réseau de neurones. De ce fait, nous avons commencé à nous renseigner sur les différentes librairies. \\ Parmi elles, Pylearn2 qui nous avait été justement conseiller par nos encadrants. 
+Pour notre projet, nous souhaitions agrandir des images avec un réseau de neurones. De ce fait, nous avons commencé à nous renseigner sur les différentes librairies. \\ Parmi elles, Pylearn2 qui nous avait été justement conseillé par nos encadrants. 
 \subsection{Theano et Pylearn2}
-Notre choix s'est donc orienté vers Pylearn2 une librairie opensource sous license BSD qui utilise Theano (librairie machine-learning reconnue).
-\\ De plus, c'est une librairie python, langage que nous connaissions.
+Notre choix s'est donc orienté vers Pylearn2 une librairie opensource sous license BSD qui utilise Theano (librairie machine learning reconnue).
+\\ De plus, c'est une librairie python, langage que nous connaissons.
 \\
 
 Pylearn2 est avant tout une librairie de machine learning permettant de résoudre des problèmes de toutes sortes.(Clustering, classification, etc...)
@@ -117,36 +119,52 @@ Pylearn2 permet la définition d'un modèle de machine learning grâce à un scr
 \\
 
 Initialement, pour bien comprendre le fonctionnement de la bibliothèque, nous avions réalisé une première version du projet uniquement avec des scripts Python. 
-\\ Cependant, nous nous sommes très vite rendu compte des limites que cela engendrait. En effet, le code était devenu lourd et difficile à utiliser. 
+\\ Cependant, nous nous sommes très vite rendu compte des limites que cela engendraient. En effet, le code était devenu lourd et difficile à utiliser. 
 \\
 
-Par la suite, nous avons donc utilisé \emph{YAML} avec Python comme proposé par Pylearn2. Le côté architecture du réseau de neurones centralisé dans les scripts \emph{YAML} et le reste gérer par les scripts Python. 
+Par la suite, nous avons donc utilisé \emph{YAML} avec Python comme proposé par Pylearn2. Le côté architecture du réseau de neurones centralisé dans les scripts \emph{YAML} et le reste géré par les scripts Python. 
 
 \section{Les différentes étapes du projet}
-	\subsection{Choix et construction du Dataset}
-Au commencement du projet, il était question de faire un Dataset composé de chiffre allant de 0 à 9. 
-Cependant, nous avons vite été confronté à un problème, sa taille. En effet, notre Dataset n'était composé que de 50 éléments, ce qui est largement insuffisant pour que l'apprentissage soit efficace.
-\\ Nous avons donc décidé de changer les données utilisées en images 32 pixels par 32, noir et blanc, représentant des ellipses et des rectangles.
+	\subsection{Le Dataset}
+		\subsubsection{Construction}
+Au commencement du projet, il était question de faire un Dataset composé de chiffres allant de 0 à 9. 
+Cependant, nous avons vite été confronté à un problème: sa taille. En effet, celui-ci n'était composé que de 50 éléments, ce qui est largement insuffisant pour que l'apprentissage soit efficace.
+\\
+
+ Nous avons donc décidé de changer les données utilisées en images 32 pixels par 32, noir et blanc, représentant des ellipses et des rectangles.
+\\Afin de contrer le problème de la taille du Dataset, nous avons crée un script Python capable de générer des images aléatoires en faisant varier la taille de l'objet, son inclinaison et sa position dans l'image générale. Grâce à cette méthode, nous avons réussi à avoir un Dataset de 2000 images. 
+		\subsubsection{Utilisation}
+Une fois ces images obtenues, nous avons besoin de créer un objet \emph{DenseDesignMatrix} qui pourra être ensuite utilisé par Pylearn2.\\ Cet objet sera  sérialiser sous la forme d'un fichier pickel puis désérialiser grâce à la ligne de code suivante : \begin{verbatim}
+"dataset": &train !pkl: "dataset_app.pkl",
+\end{verbatim}
+pour ensuite être utiliser lors de l’entraînement du réseau. 
+
  
 	\subsection{Utilisation de Patchs}
 	% mettre des images en entier sur le réseau -> beaucoup trop lent. Du coup réduction de la taille du réseau en ne passant que les patchs
 	% deux nouveaux algo pour découper l'image en patch et pour la reformer
-Les images que nous utilisons sont de taille 32 par 32 pixels. Au départ nous avions pensé créer un réseau avec une entrée de dimension $32 \times 32 = 1024$ pour avoir en sortie une image agrandie $40 \times 40 = 1600$. Mais nous n'obtenions pas de résultats concluant et la taille du réseau rendant l'apprentissage très long. Nous avons donc imaginé découper les images en patchs.
+Les images que nous utilisons sont de taille 32 par 32 pixels. Au départ, nous avions pensé créer un réseau avec une entrée de dimension $32 \times 32 = 1024$ pour avoir en sortie une image agrandie $40 \times 40 = 1600$. Cependant, les résultats n'étaient pas concluant et la taille du réseau rendait l'apprentissage très long. Nous avons donc émis l'hypothèse que découper les images en patchs, avant de les mettre dans le réseau donnerait de meilleur résultats.
 \\
 
-Après avoir soumis l'idée à nos encadrants, nous avons pris la décision de découper les images d'entrées en patchs de taille $8 \times 8$ avec un recouvrement de moitié. Pour obtenir le même nombre de patchs en entrée et en sortie, nous avons décidé de prendre des patchs de sortie de $10 \times 10$ ce qui nous fait donc une image finale de taille $40 \times 40$. L'image est reconstruite en superposant les patchs avec toujours un recouvrement de moitié et en faisant la moyenne des valeurs des pixels qui se recouvrent. 
+Après avoir soumis l'idée à nos encadrants, nous avons pris la décision de découper les images d'entrées en patchs de taille $8 \times 8$ avec un recouvrement de moitié. Afin d'obtenir le même nombre de patchs en entrée et en sortie, nous avons pris des patchs de sortie de $10 \times 10$ produisant ainsi une image finale de taille $40 \times 40$.\\ Puis, on reconstruit l'image en superposant les patchs avec toujours un recouvrement de moitié et en faisant la moyenne des valeurs des pixels qui se recouvrent. 
 \\
 
-Finalement nous utilisons une fonction de seuillage pour éviter d'obtenir des valeurs inférieurs à zéro ou supérieur à 255.
+Finalement nous utilisons une fonction de seuillage pour éviter d'obtenir des valeurs inférieures à zéro ou supérieur à 255.
 
 	\subsection{Structure du réseau}
 	% nb couche
-Durant le projet nous avons essayé plusieurs architectures de réseau. Au début nous avons fait l'erreur de ne pas faire suffisamment attention à l'ensemble d'arrivé des fonctions d'activations que nous utilisions. Mais finalement nous avons obtenu une architecture satisfaisante.
+Au début du projet, nous avions fait un certain nombre de recherche sur le fonctionnement et la mise en place d'un réseau de neurones. Malheureusement, il est très difficile de trouver une architecture adéquate du premier coup sans avoir une certaine expérience dans le domaine. \\
+Nous avons donc fait nos premiers choix par rapport à ce que nous avions lu durant nos recherches: choix du nombre de couches, du nombres de neurones et choix des fonctions d'activations. 
+
+Cependant, lors de ces premiers essais, nous utilisions des fonctions d'activation génériques (\emph{Sigmoid} notamment), sans vraiment tenir compte de l'ensemble d'arrivée de celle-ci. 
+Nous avons donc du retravailler à plusieurs reprises l'architecture de notre réseau, pour finalement arrivé à une architecture qui selon est assez satisfaisante. 
 
 	\subsubsection{Les fonctions d'activation}
 	% erreur de domaine de nos données, SIgmoid prend entre -inf et +inf pour ressortir en 0 et 1 ; 
 	% ajouter un shéma pour expliquer les différentes couches
-Initialement nous avons choisi comme fonction d'activation sur deux couches une Sigmoid. Cependant l'ensemble de définition d'une Sigmoid est entre -inf et +inf et l'ensemble d'arrivé 0 et 1. Donc en sortie de la première couche les valeurs sont comprisent entre 0 et 1. En passant dans la seconde couche les données sont donc entre 0.5 et 1 ce qui n'est pas satisfaisant. 
+Initialement, nous avions décidé de construire un réseau de neurones avec deux couches et d'utiliser la même fonction d'activation pour chacune d'elles : une \emph{Sigmoid}.
+
+Cependant l'ensemble de définition d'une \emph{Sigmoid} est de -inf à +inf et l'ensemble d'arrivé variant de 0 à 1. En sortie de la première couche les valeurs étaient donc comprise entre 0 et 1. Donc à la sortie de la seconde couche les données étaient entre 0.5 et 1 ce qui n'est pas satisfaisant. 
 
 \begin{figure}[h!]
   \centering
@@ -154,22 +172,86 @@ Initialement nous avons choisi comme fonction d'activation sur deux couches une 
   \caption{Fonction Sigmoid}
 \end{figure}
 
-Après des recherches nous avons trouvé l'architecture suivante:
-Tout d'abord une couche Sigmoid, puis RectifiedLinear et finalement GaussianLinear en couche de sortie.
+Finalement au bout de plusieurs essais, notre réseau à l'architecture suivante:
+Tout d'abord une couche \emph{Sigmoid}, puis une \emph{ RectifiedLinear} et enfin, une \emph{GaussianLinear} en couche de sortie.
+
+	\subsubsection{Les différentes couches}
+	
+Durant la majorité du projet, nous étions sur un réseau en deux couches, comme évoqué précédemment. Avec une couche caché, dite \emph{hidden}, et la couche de sortie. 
+
+Puis, suite à nos tests, nous avons conclue qu'un réseau en trois couches serait plus efficace. Le réseau actuel, est donc composé de trois couches: 
+\newpage
+\begin{center}
+\begin{tabular}{|l|c|r|}
+  \hline
+  couche & dimension & fonction d'activation\\
+  \hline
+  1 & 75 & Sigmoid \\
+  2 & 90 & RectifiedLinear \\
+  3 & 100 & LinearGaussian \\
+  \hline
+\end{tabular}
+\end{center}
+
+Voici finalement, un schéma de l'architecture actuelle du réseau :
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=1]{Images/architecture.png}
   \caption{Architecture du réseau final}
 \end{figure}
-
+\newpage
 \section{Problèmes rencontrés}
+Durant le déroulement du projet nous avons rencontrés quelques difficultés, en voici les principales. 
 	\subsection{Le problème du pas}
-	% Avant nous baissions tout simplement le learning rate ds une certaines fourchette d'epochs
-	% tente d'utiliser un algo plus "intelligent" qui regarde 1 channel +val de sortie et par rapport à cette valeur fait augmenter ou dim le LR
+Afin de mieux se rendre compte des résultats obtenus, nous avons utilisé \emph{LiveMonitor}, outil disponible dans Pylearn2 permettant de tracer les courbes d'apprentissage et de validation. 
+
+Grâce à cet outil, nous avons tout d'abord remarqué que nos erreurs (apprentissage et validation) ne tombaient pas à 0 mais stagnaient plutôt autour d'une certaine valeur. Valeur qui pouvait changer en fonction du \emph{learning rate}. 
+Nous avons donc utilisé deux approches pour tenter de corriger ce problème:
+
+La première, travailler sur le \emph{learning-rate} de manière "brutale", en baissant tout simplement celui-ci une fois arrivé dans un certaine fourchette d'epochs. 
+
+La seconde en utilisant un algorithme plus "intelligent", qui regarde un channel et une valeur de sortie et fait augmenter ou diminuer le \emph{learning rate} par rapport à cette valeur. Cette seconde approche s'est évéré la plus efficace. (voir code en dessous)
+\\
+
+Malgré plusieurs tentatives, nous n'avons pas réussi à corriger entièrement ce problème, nous l'avons juste diminuer fortement.
+
+\begin{verbatim}
+!obj:pylearn2.training_algorithms.sgd.MonitorBasedLRAdjuster {
+    "high_trigger": 0.95,
+    "low_trigger": 0.0,
+    "grow_amt": 2,
+    "shrink_amt": 0.5,
+    "max_lr": 0.3,
+    "min_lr": 0.000000001,
+    "dataset_name": 'valid',
+    "channel_name": 'valid_y_mse'
+ },
+\end{verbatim}
+	
 	\subsection{Upscalling-RGB}
-	% tentative de faire un réseau de neurones capable de faire de l'upscalling avec des images en couleur. 
-	% -> problème notre image de sortie est en niveau de bleu principalement
+Étant relativement satisfait des résultats obtenus, nous avons décidé d'adapter notre code pour pouvoir faire la même chose avec des images RGB. 
+
+Nous avons donc repris la fonction \emph{upscalling}, pour la transformer en \emph{upscalling-RGB}. Concrètement, on applique notre traitement "upscalling" sur chacun des channels. 
+
+Comme prévu, le résultat n'était pas celui attendu. En effet, il semble que les couleurs sont mal pris en compte, on obtient quelque chose de très bleu. 
+
+\begin{center}
+\begin{tabular}{cc}
+   \includegraphics[scale=2]{Images/rectangleR_original.png} &
+   \includegraphics[scale=2]
+   {Images/rectangleR_reconstruction.png} \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{cc}
+   \includegraphics[scale=0.5]{Images/oiseau_original.png} &
+   \includegraphics[scale=0.5]
+   {Images/oiseau_reconstruction.png} \\
+\end{tabular}
+
+\end{center}
 
 \section*{Conclusion}
 \end{document}
