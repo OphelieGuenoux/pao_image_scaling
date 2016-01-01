@@ -22,7 +22,9 @@ SuperScale.upscaling("./tests/images/53.png", "./tests")
 SuperScale.upscaling("./tests/images/177.png", "./tests")
 SuperScale.upscaling("./tests/images/119.png", "./tests")
 SuperScale.upscaling("./tests/images/212.png", "./tests")
+SuperScale.upscaling("./tests/images/1241.jpg", "./tests")
 SuperScale.upscalingRGB("./tests/images/rectangleR.png","./tests")
+
 
 #roundval = 100
 
