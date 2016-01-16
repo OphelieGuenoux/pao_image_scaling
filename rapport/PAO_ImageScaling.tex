@@ -1,6 +1,6 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage[utf8]{inputenc}
-%\usepackage[french]{babel}
+\usepackage[french]{babel}
 \usepackage{amsfonts}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -52,20 +52,32 @@
 \newpage
 \tableofcontents
 \newpage
+
+\vspace*{5cm}
+
 \section*{Introduction}
 
-\section{État de l'art}
+Dans le cadre de notre projet PAO du semetre 7 en ASI (Architecture des systèmes d'informations). Nous avons décidé de nous initier à l'utilisation d'un réseau de neurones en nous attaquant au problème de l'agrandissement d'images matricielles.
+\\
 
-\subsection{Image Scaling}
+Dans ce rapport nous revenons sur notre expérience et les différentes étapes de notre démarche pour résoudre le problème. Nous commencerons par expliquer brièvement ce qu'est l'image scaling, pour ensuite revenir sur le choix de la librairie utilisée. Finalement, nous parlerons des différentes parties de notre réalisation et expliciterons les problèmes que nous avons pu rencontrer ; du fait qu'il s'agit pour nous d'une première approche de ce type d'outil.
+
+
+\newpage
+
+\section{L'image Scaling}
+
+\subsection{Définition}
 L'\textit{image scaling} est l'expression anglaise désignant les procédés informatiques liés à \\
 l'agrandissement ou la réduction de la taille d'une image.
 
-Il existe deux familles d'images, les images vectorielles et les images matricielles. Dans le cas d'images vectorielles l'agrandissement et la réduction sont effectués par le recalcul de l'image à partir d'équations stockées dans le fichier. De cette manière nous pouvons obtenir une image lisse quelque soit le coefficient d'échelle appliqué. Ce recalcul est cependant coûteux en temps et ressources. C'est la raison pour laquelle les images matricielles sont plus répandues. Ce type d'image consiste en une matrice de trois dimensions, la largeur, la hauteur, et les trois ou quatre canaux de couleurs. \\Des algorithmes de compressions permettent de faciliter le stockage mais aussi la transmission car dans le cas contraire les images peuvent être assez "lourdes".
+Il existe deux familles d'images, les images vectorielles et les images matricielles.
 
-Dans de nombreuses applications les images matricielles sont préférées. Par exemple dans les anciens jeux-vidéos, mais aussi dans les icônes ainsi que dans la majorité des images que l'on trouve sur internet. Là où les temps de chargement doivent être minimum.
-\\
+Dans le cas d'images vectorielles l'agrandissement et la réduction sont effectués par le recalcul de l'image à partir d'équations géométriques (points, courbes, droites, ...), stockées dans un fichier. De cette manière nous pouvons obtenir une image ``lisse'' quelque soit le coefficient d'échelle appliqué. Malheureusement peu d'images peuvent être représentées sous un ensembles de formes géométriques. C'est la raison pour laquelle les images vectorielles sont réservées à la création de diagrammes ou parfois de logos. Les images matricielles restent largement plus répandues.
 
-Cependant à cause de certaines contraintes, il peut être intéressant de modifier la taille d'une image. Par exemple pour s'adapter aux différents types d'écrans. De plus avec l'augmentation de la résolution des écrans, certaines images doivent être très petites pour être affichées correctement. Le meilleur exemple étant la remasterisation d'anciens jeux vidéos.
+Ce type d'image consiste en une matrice de trois dimensions, la largeur, la hauteur, et les trois ou quatre canaux de couleurs. Plus le nombre de pixels stockés est élevé, plus l'image est détaillée mais elle est également plus lourde. Des algorithmes de compressions permettent de faciliter le stockage et la transmission de celle-ci. Il s'agit des formats comme JPEG, PNG, GIF, ...
+
+Les images matricielles sont aujourd'hui bien plus répandues. Cependant, il peut être nécessaire dans certains cas de modifier la taille d'une image. Par exemple pour s'adapter aux différents types d'écrans ; avec en particulier l'augmentation de leur résolution. Certaines images doivent être agrandies pour être affichées correctement.
 
 \begin{figure}[h!]
   \centering
@@ -75,9 +87,9 @@ Cependant à cause de certaines contraintes, il peut être intéressant de modif
 
 \subsection{Agrandissement}
  
-L'augmentation de la taille d'une image revient à "créer" de nouveaux pixels qu'il faudrait remplir le mieux possible afin de garder une continuité.
+L'augmentation de la taille d'une image revient à "créer" de nouveaux pixels qu'il faudrait remplir le mieux possible afin de garder une continuité. Il faut donc ajouter de l'information que l'on ne connaît pas à la base. Il existe des algorithmes permettant de ``prédire'' la valeur des pixels a crées.
 
-L'algorithme le plus simple est celui du plus proche voisin. Il est très rapide mais fourni un résultat pixélisé. 
+L'algorithme le plus simple est celui du plus proche voisin. Il est très rapide mais fourni un résultat pixélisé. C'est le plus répandu pour l'agrandissement ``à la volé''. Par exemple les visionneuses d'images l'utilisent.
 
 \begin{figure}[h!]
   \centering
@@ -85,24 +97,27 @@ L'algorithme le plus simple est celui du plus proche voisin. Il est très rapide
   \caption{Algorithme du plus proche voisin}
 \end{figure}
 
-De très nombreux algorithmes existent, certain développés par d'importants laboratoires. Une liste exhaustive est disponible ici:
+De très nombreux algorithmes plus puissant existent, certain développés par de grandes entreprises. Une liste exhaustive est disponible ici:
 
 \url{https://en.wikipedia.org/wiki/Image_scaling#Pixel_art_scaling_algorithms}
 
 \subsection{Réduction}
 
-La réduction d'une image est un procédé plus simple car il consiste généralement à supprimer des pixels de façon régulière(par exemple un sur deux). Il n'existe pas vraiment de problèmes liés à ces algorithmes car ils sont très simples à mettre en œuvre et l'exécution est peu complexe.
+La réduction d'une image est un procédé plus simple car il consiste généralement à supprimer des pixels de façon régulière(par exemple un sur deux). Il n'existe pas vraiment de problèmes liés à ces algorithmes car ils sont très simples à mettre en œuvre et l'exécution est peu complexe. Il forcement plus simple d'éliminer de l'information que d'en créer.
 
 
 \section{Choix de la librairie}
-Pour notre projet, nous souhaitions agrandir des images avec un réseau de neurones. De ce fait, nous avons commencé à nous renseigner sur les différentes librairies. \\ Parmi elles, Pylearn2 qui nous avait été justement conseillé par nos encadrants. 
+
+Pour notre projet, nous souhaitions agrandir des images avec un réseau de neurones. Il s'agit effectivement d'un problème de machine learning pour son aspect prédictif. En effet le but est de prévoir la valeur des pixels à remplir. De ce fait, nous avons commencé à nous renseigner sur les différentes librairies de machine learning proposant des réseaux de neurones. \\ Parmi elles, Pylearn2 qui nous avait été justement conseillé par nos encadrants. 
+
 \subsection{Theano et Pylearn2}
-Notre choix s'est donc orienté vers Pylearn2 une librairie opensource sous license BSD qui utilise Theano (librairie machine learning reconnue).
-\\ De plus, c'est une librairie python, langage que nous connaissons.
+Notre choix s'est donc rapidement orienté vers Pylearn2 une librairie opensource sous license BSD qui utilise Theano (librairie machine learning reconnue). La librairie est en python, langage que nous connaissons. 
 \\
 
-Pylearn2 est avant tout une librairie de machine learning permettant de résoudre des problèmes de toutes sortes.(Clustering, classification, etc...)
-\\De plus, la librairie implémente un ensemble de fonctions liées à la création de réseaux de neurones artificiels. Il s'agit de la classe MLP (\emph{multi layers perceptron}), qui contient toutes les types de couches connues. \\ Par exemple, dans le code suivant, nous créons un réseau de neurones contenant une couche de 75 neurones avec comme fonction d'activation une \emph{Sigmoid}
+Pylearn2 est avant tout une librairie de machine learning permettant de résoudre des problèmes de toutes sortes.(Clustering, classification, etc...).
+
+Nous nous sommes intéressés à son implémentation de fonctions liées à la création de réseaux de neurones artificiels. Il s'agit de la classe MLP (\emph{multi layers perceptron}), qui contient toutes les types de couches connues. \\ Par exemple, dans le code suivant, nous créons un réseau de neurones contenant une couche de 75 neurones avec comme fonction d'activation une \emph{Sigmoid}
+
 \begin{verbatim}
 "model": !obj:pylearn2.models.mlp.MLP {
   "layers": [
@@ -114,6 +129,7 @@ Pylearn2 est avant tout une librairie de machine learning permettant de résoudr
  ]
 }
 \end{verbatim}
+
 \subsection{Utilisation de \emph{YAML} avec Python}
 Pylearn2 permet la définition d'un modèle de machine learning grâce à un script en \emph{YAML}.\\ L'exemple précédent est un extrait du script \emph{YAML} utilisé dans notre projet. 
 \\
@@ -134,7 +150,8 @@ Cependant, nous avons vite été confronté à un problème: sa taille. En effet
  Nous avons donc décidé de changer les données utilisées en images 32 pixels par 32, noir et blanc, représentant des ellipses et des rectangles.
 \\Afin de contrer le problème de la taille du Dataset, nous avons crée un script Python capable de générer des images aléatoires en faisant varier la taille de l'objet, son inclinaison et sa position dans l'image générale. Grâce à cette méthode, nous avons réussi à avoir un Dataset de 2000 images. 
 		\subsubsection{Utilisation}
-Une fois ces images obtenues, nous avons besoin de créer un objet \emph{DenseDesignMatrix} qui pourra être ensuite utilisé par Pylearn2.\\ Cet objet sera  sérialiser sous la forme d'un fichier pickel puis désérialiser grâce à la ligne de code suivante : \begin{verbatim}
+Une fois ces images obtenues, nous avons besoin de créer un objet \emph{DenseDesignMatrix} qui pourra être ensuite utilisé par Pylearn2.\\ Cet objet sera  sérialiser sous la forme d'un fichier pickel puis désérialiser grâce à la ligne de code suivante :
+\begin{verbatim}
 "dataset": &train !pkl: "dataset_app.pkl",
 \end{verbatim}
 pour ensuite être utiliser lors de l’entraînement du réseau. 
@@ -153,7 +170,7 @@ Finalement nous utilisons une fonction de seuillage pour éviter d'obtenir des v
 
 	\subsection{Structure du réseau}
 	% nb couche
-Au début du projet, nous avions fait un certain nombre de recherche sur le fonctionnement et la mise en place d'un réseau de neurones. Malheureusement, il est très difficile de trouver une architecture adéquate du premier coup sans avoir une certaine expérience dans le domaine. \\
+Au début du projet, nous avions fait un certain nombre de recherches sur le fonctionnement et la mise en place d'un réseau de neurones. Malheureusement, il est très difficile de trouver une architecture adéquate du premier coup sans avoir une certaine expérience. \\
 Nous avons donc fait nos premiers choix par rapport à ce que nous avions lu durant nos recherches: choix du nombre de couches, du nombres de neurones et choix des fonctions d'activations. 
 
 Cependant, lors de ces premiers essais, nous utilisions des fonctions d'activation génériques (\emph{Sigmoid} notamment), sans vraiment tenir compte de l'ensemble d'arrivée de celle-ci. 
