@@ -36,10 +36,10 @@ for im in os.listdir("./dataset/images_test_output"):
 	indice = im.split(".")[0]
 	imagePred = imread("./vrai_test/"+indice+"_reconstruction.png", flatten=1)
 	imageVrai = imread("./dataset/images_test_output/"+im, flatten=1)
-	erreur.append(sum(sum(pow(imageVrai-imagePred, 2)))/(40*40))
+	erreur.append(sum(sum(abs(imageVrai-imagePred)))/(40*40))
 	i = i + 1
 mse = sum(erreur)/len(erreur)
-print("Erreur quadratique moyenne de test : ")
+print("Variation moyenne d'un pixel : ")
 print(mse)
 
 #roundval = 100
