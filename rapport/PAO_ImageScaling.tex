@@ -39,9 +39,9 @@
 			\vspace{1cm}
 			\begin{figure}[h!]
 				\centering
-				%\includegraphics[width=0.7\textwidth]{Images/radcul.jpg}
+				\includegraphics[width=0.5\textwidth]{Images/page-de-garde.png}
 			\end{figure}
-	\vspace{1cm}
+	\vspace{4cm}
 	\end{center}
 	\raggedright
 	\large Ophélie Guenoux \hfill Encadrant : M.Chatelain \& M.Herault
@@ -57,10 +57,13 @@
 
 \section*{Introduction}
 
-Dans le cadre de notre projet PAO du semetre 7 en ASI (Architecture des systèmes d'informations). Nous avons décidé de nous initier à l'utilisation d'un réseau de neurones en nous attaquant au problème de l'agrandissement d'images matricielles.
+Dans le cadre de notre projet PAO du semetre 7 en ASI (Architecture des systèmes d'informations), nous avons décidé de travailler sur la problématique d'agrandissement d'images matricielles à l'aide de réseaux de neurones artificiels.
 \\
 
-Dans ce rapport nous revenons sur notre expérience et les différentes étapes de notre démarche pour résoudre le problème. Nous commencerons par expliquer brièvement ce qu'est l'image scaling, pour ensuite revenir sur le choix de la librairie utilisée. Finalement, nous parlerons des différentes parties de notre réalisation et expliciterons les problèmes que nous avons pu rencontrer ; du fait qu'il s'agit pour nous d'une première approche de ce type d'outil.
+Ce projet a été l'occasion pour nous de découvrir de nouvelles techniques d'apprentissage automatique, avec en particulier l'utilisation des réseaux de neurones que nous n'avons pas encore étudiés.
+\\
+
+Dans ce rapport nous revenons sur les différentes étapes et la démarche que nous avons mis en place pour résoudre ce problème. Nous commencerons par expliquer brièvement ce qu'est l'image scaling, pour ensuite aborder le choix de la librairie utilisée. Finalement, nous parlerons des différentes parties de notre réalisation et expliciterons les problèmes que nous avons pu rencontrer.
 
 
 \newpage
@@ -68,14 +71,13 @@ Dans ce rapport nous revenons sur notre expérience et les différentes étapes 
 \section{L'image Scaling}
 
 \subsection{Définition}
-L'\textit{image scaling} est l'expression anglaise désignant les procédés informatiques liés à \\
-l'agrandissement ou la réduction de la taille d'une image.
+L'\textit{image scaling} est l'expression anglaise désignant les procédés informatiques liés à l'agrandissement ou la réduction de la taille d'une image.
 
 Il existe deux familles d'images, les images vectorielles et les images matricielles.
 
-Dans le cas d'images vectorielles l'agrandissement et la réduction sont effectués par le recalcul de l'image à partir d'équations géométriques (points, courbes, droites, ...), stockées dans un fichier. De cette manière nous pouvons obtenir une image ``lisse'' quelque soit le coefficient d'échelle appliqué. Malheureusement peu d'images peuvent être représentées sous un ensembles de formes géométriques. C'est la raison pour laquelle les images vectorielles sont réservées à la création de diagrammes ou parfois de logos. Les images matricielles restent largement plus répandues.
+Dans le cas d'images vectorielles l'agrandissement et la réduction sont effectués par le calcul de l'image à partir d'équations géométriques (points, courbes, droites, ...), stockées dans un fichier. De cette manière nous pouvons obtenir une image ``lisse'' quelque soit le coefficient d'échelle appliqué. Malheureusement peu d'images peuvent être représentées sous un ensemble de formes géométriques. C'est la raison pour laquelle les images vectorielles sont réservées à la création de diagrammes ou parfois de logos. Les images matricielles restent largement plus répandues.
 
-Ce type d'image consiste en une matrice de trois dimensions, la largeur, la hauteur, et les trois ou quatre canaux de couleurs. Plus le nombre de pixels stockés est élevé, plus l'image est détaillée mais elle est également plus lourde. Des algorithmes de compressions permettent de faciliter le stockage et la transmission de celle-ci. Il s'agit des formats comme JPEG, PNG, GIF, ...
+Ce type d'image consiste en une matrice de trois dimensions, la largeur, la hauteur, et les trois ou quatre canaux de couleurs. Plus le nombre de pixels stockés est élevé, plus l'image est détaillée mais elle est également plus lourde. Des algorithmes de compressions permettent de faciliter le stockage et la transmission de celle-ci. Il s'agit par exemple, des formats comme JPEG, PNG, GIF, ...
 
 Les images matricielles sont aujourd'hui bien plus répandues. Cependant, il peut être nécessaire dans certains cas de modifier la taille d'une image. Par exemple pour s'adapter aux différents types d'écrans ; avec en particulier l'augmentation de leur résolution. Certaines images doivent être agrandies pour être affichées correctement.
 
@@ -181,7 +183,7 @@ Nous avons donc du retravailler à plusieurs reprises l'architecture de notre r�
 	% ajouter un shéma pour expliquer les différentes couches
 Initialement, nous avions décidé de construire un réseau de neurones avec deux couches et d'utiliser la même fonction d'activation pour chacune d'elles : une \emph{Sigmoid}.
 
-Cependant l'ensemble de définition d'une \emph{Sigmoid} est de -inf à +inf et l'ensemble d'arrivé variant de 0 à 1. En sortie de la première couche les valeurs étaient donc comprise entre 0 et 1. Donc à la sortie de la seconde couche les données étaient entre 0.5 et 1 ce qui n'est pas satisfaisant. 
+Cependant l'ensemble de définition d'une \emph{Sigmoid} est de $-\infty$ à $+\infty$ et l'ensemble d'arrivé variant de 0 à 1. En sortie de la première couche les valeurs étaient donc comprise entre 0 et 1. Donc à la sortie de la seconde couche les données étaient entre 0.5 et 1 ce qui n'est pas satisfaisant. 
 
 \begin{figure}[h!]
   \centering
@@ -189,15 +191,37 @@ Cependant l'ensemble de définition d'une \emph{Sigmoid} est de -inf à +inf et 
   \caption{Fonction Sigmoid}
 \end{figure}
 
-Finalement au bout de plusieurs essais, notre réseau à l'architecture suivante:
-Tout d'abord une couche \emph{Sigmoid}, puis une \emph{ RectifiedLinear} et enfin, une \emph{GaussianLinear} en couche de sortie.
+Finalement au bout de plusieurs essais, notre réseau possède l'architecture suivante:
+Tout d'abord une couche \emph{Sigmoid}, puis une \emph{RectifiedLinear} et enfin, une \emph{GaussianLinear} en couche de sortie.
+\\
+
+La première couche utilise des \emph{Sigmoid} donc les valeurs de sorties sont comprisent entre 0 et 1, comme expliqué précédemment.
+
+La seconde couche utilise la fonction d'activation \emph{RectifiedLinear}. Cette fonction est simplement une rampe dans $[0 , +\infty[$ sinon 0. Elle peut donc être définite comme ceci:
+$$f(x) = \left\{
+        \begin{array}{ll}
+          x & \mbox{si } x \in [0;+\infty[ \\
+          0 & \mbox{sinon.}
+        \end{array}
+      \right.$$
+ Les données en sorties sont donc encore entre 0 et 1.
+
+ \begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.4]{Images/rectified.png}
+  \caption{Fonction RectifiedLinear}
+\end{figure}
+
+La couche de sortie est un peu différente. Il s'agit d'une fonction linéaire comme la fonction présenté juste avant, mais qui ``passe'' à travers une loi normale. En réalité $$ y \sim p(y | x) = N(y | Wx+b, \beta^{-1}) $$ donc y suit une loi conditionnelle normale de moyenne $Wx+b$ et de variance $\beta^{-1}$.
+
+$\beta$ est un paramètre supplémentaire qui doit être recalculé lors de l'algorithme de la descente du gradient.
 
 	\subsubsection{Les différentes couches}
 	
 Durant la majorité du projet, nous étions sur un réseau en deux couches, comme évoqué précédemment. Avec une couche caché, dite \emph{hidden}, et la couche de sortie. 
 
 Puis, suite à nos tests, nous avons conclue qu'un réseau en trois couches serait plus efficace. Le réseau actuel, est donc composé de trois couches: 
-\newpage
+
 \begin{center}
 \begin{tabular}{|l|c|r|}
   \hline
@@ -210,13 +234,61 @@ Puis, suite à nos tests, nous avons conclue qu'un réseau en trois couches sera
 \end{tabular}
 \end{center}
 
-Voici finalement, un schéma de l'architecture actuelle du réseau :
+Voici finalement, un extrait du fichier YAML qui déclare les différentes couches :
 
 \begin{figure}[h!]
-  \centering
-  \includegraphics[scale=1]{Images/architecture.png}
+\begin{verbatim}
+"layers": [
+      !obj:pylearn2.models.mlp.Sigmoid {
+         layer_name: 'h1',
+         dim: 75,
+         irange: .5,
+       },
+       !obj:pylearn2.models.mlp.RectifiedLinear {
+          layer_name: 'h2',
+          dim: 90,
+          irange: .5,
+          max_col_norm: 1.0,
+        },
+        !obj:pylearn2.models.mlp.LinearGaussian {
+           init_bias: !obj:pylearn2.models.mlp.mean_of_targets { dataset: *train },
+           init_beta: !obj:pylearn2.models.mlp.beta_from_targets { dataset: *train },
+           min_beta: 1.,
+           max_beta: 100.,
+           beta_lr_scale: 1.,
+           dim: 100,
+           layer_name: 'y',
+           irange: .5,
+       }
+\end{verbatim}
   \caption{Architecture du réseau final}
 \end{figure}
+
+
+Le réseau est entraîné par l'algorithme de la descente du gradient (SGD : \emph{Stochastic Gradient Descent}). 
+
+\begin{figure}[h!]
+\begin{verbatim}
+  "algorithm": !obj:pylearn2.training_algorithms.sgd.SGD {
+      "learning_rate" : 0.001,
+      "batch_size" : 1,
+      "monitoring_batches" : 1,
+      "monitoring_dataset": {
+         "train": *train,
+         "valid": !pkl: "dataset_val.pkl",
+      },
+      "termination_criterion": !obj:pylearn2.termination_criteria.EpochCounter {
+         "max_epochs": 1000,
+      },
+      learning_rule: !obj:pylearn2.training_algorithms.learning_rule.AdaGrad {},
+   }
+\end{verbatim}
+  \caption{Déclaration de l'algorithme d'apprentissage}
+\end{figure}
+
+
+
+
 \newpage
 \section{Problèmes rencontrés}
 Durant le déroulement du projet nous avons rencontrés quelques difficultés, en voici les principales. 

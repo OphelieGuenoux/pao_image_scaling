@@ -27,8 +27,8 @@ from scipy.misc import imread
 #SuperScale.upscaling("./tests/images/1241.jpg", "./tests")
 #SuperScale.upscalingRGB("./tests/images/rectangleR.png","./tests")
 
-#for im in os.listdir("./dataset/images_test_input"):
-#	SuperScale.upscaling("./dataset/images_test_input/"+im, "./vrai_test")
+for im in os.listdir("./dataset/images_test_input"):
+	SuperScale.upscaling("./dataset/images_test_input/"+im, "./vrai_test")
 
 i = 0
 erreur = []
